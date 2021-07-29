@@ -25,7 +25,7 @@
 data "aws_caller_identity" "current" {}
 
 locals {
-  deploy_artifact_key = "deploy.zip"
+  deploy_artifact_key = "${trimspace(var.name)}_deploy.zip"
   role_arn            = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${var.role_name}"
 }
 
@@ -49,7 +49,7 @@ resource "aws_iam_role_policy_attachment" "lambda_xray" {
 # Not always required but it's more consistent for deploying larger files
 resource "aws_s3_bucket" "lambda_deploy" {
   acl           = "private"
-  bucket_prefix = "lambda-deploy"
+  bucket        = "lambda-deploy"
   force_destroy = true
 
   versioning {
